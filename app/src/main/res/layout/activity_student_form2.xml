@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Nagłówek -->
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="0dp"
+            android:layout_height="135dp"
+            android:background="@color/formColor"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/header_form"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Etykieta: Imię -->
+        <TextView
+            android:id="@+id/label_first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_first_name"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Pole tekstowe: Imię -->
+        <EditText
+            android:id="@+id/first_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:hint="@string/hint_first_name"
+            app:layout_constraintTop_toBottomOf="@id/label_first_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Etykieta: Nazwisko -->
+        <TextView
+            android:id="@+id/label_last_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_last_name"
+            app:layout_constraintTop_toBottomOf="@id/first_name"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Pole tekstowe: Nazwisko -->
+        <EditText
+            android:id="@+id/last_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:hint="@string/hint_last_name"
+            app:layout_constraintTop_toBottomOf="@id/label_last_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Etykieta: Liczba ocen -->
+        <TextView
+            android:id="@+id/label_grades_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_grades_number"
+            app:layout_constraintTop_toBottomOf="@id/last_name"
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Pole tekstowe: Liczba ocen -->
+        <EditText
+            android:id="@+id/grades_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:hint="@string/hint_grades_number"
+            android:inputType="number"
+            app:layout_constraintTop_toBottomOf="@id/label_grades_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Przycisk "Oceny"-->
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit_button"
+            android:visibility="gone"
+            android:backgroundTint="@color/formButtonColor"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/grades_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Tekst średniej -->
+        <TextView
+            android:id="@+id/average_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/average_placeholder"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/submit_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Przycisk kończący aktywność -->
+        <Button
+            android:id="@+id/end_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/average_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="36dp"
+            app:titleTextColor="@android:color/white"
+            app:navigationIcon="@drawable/ic_back" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

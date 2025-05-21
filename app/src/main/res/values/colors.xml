@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="grey">#DDDDDD</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="formColor">#1AA047</color>
+    <color name="formButtonColor">#1A8547</color>
+    <color name="menuColor">#0288D1</color>
+    <color name="gradesColor">#D9682B</color>
+    <color name="gradesButtonColor">#C25D27</color>
+    <color name="databaseColor">#8A30C9</color>
+</resources>
