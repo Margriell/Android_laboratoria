@@ -8,5 +8,6 @@
     <color name="menuColor">#0288D1</color>
     <color name="gradesColor">#D9682B</color>
     <color name="gradesButtonColor">#C25D27</color>
-    <color name="databaseColor">#8A30C9</color>
+    <color name="databaseColor">#952DE4</color>
+    <color name="fileDownloadColor">#673AB7</color>
 </resources>

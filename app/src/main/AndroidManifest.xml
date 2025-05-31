@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Definiowanie wymaganych uprawnień aplikacji -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,12 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Laboratorium_and"
         tools:targetApi="31">
+
+        <!-- Definiowanie głównych aktywności aplikacji -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,6 +54,16 @@
             android:parentActivityName=".DatabaseActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
 
+        <activity
+            android:name=".FileDownloadActivity"
+            android:parentActivityName=".MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+
+        <!-- Definiowanie usługi pobierania plików -->
+        <service
+            android:name=".DownloadService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false" />
     </application>
 
 </manifest>

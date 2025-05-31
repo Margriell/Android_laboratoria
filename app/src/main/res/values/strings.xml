@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Laboratorium</string>
     <string name="header_name">Menu Główne</string>
-    <string name="button_student_form">Formularz Studenta</string>
+    <string name="button_1">Formularz Studenta</string>
     <string name="button_2">Phone DB</string>
-    <string name="button_3">Przycisk 3</string>
+    <string name="button_3">Pobieranie Pliku</string>
     <string name="header_form">Formularz</string>
     <string name="label_first_name">Imię:</string>
     <string name="hint_first_name">Wpisz imię</string>
@@ -59,4 +59,16 @@
     <string name="phones_list">Lista telefonów</string>
     <string name="add_phone">Dodaj telefon</string>
     <string name="header_editphone">Edytuj telefon</string>
+    <string name="header_filedownload">Pobieranie pliku</string>
+    <string name="url_label">URL:</string>
+    <string name="url_input_example">https://example.com/plik.zip</string>
+    <string name="url_input">https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.12.24.tar.xz</string>
+    <string name="get_info_button">Pobierz informacje</string>
+    <string name="file_size_label">Rozmiar pliku:</string>
+    <string name="file_size_value">0 bajtów</string>
+    <string name="file_type_label">Typ pliku:</string>
+    <string name="file_type_value">nieznany</string>
+    <string name="download_button">Pobierz</string>
+    <string name="bytes_downloaded_label">Pobrano bajtów:</string>
+    <string name="bytes_downloaded_value">0 bajtów</string>
 </resources>
