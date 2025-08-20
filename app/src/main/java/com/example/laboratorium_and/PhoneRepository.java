@@ -3,10 +3,12 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 import java.util.List;
 
+// Repozytorium pośredniczące między bazą danych Room a ViewModel
+// Wykonuje operacje na bazie danych w tle za pomocą executora
 public class PhoneRepository {
 
-    private PhoneDao mPhoneDao;
-    private LiveData<List<Phone>> mAllPhones;
+    private final PhoneDao mPhoneDao;
+    private final LiveData<List<Phone>> mAllPhones;
 
     public PhoneRepository(Application application) {
         PhoneRoomDatabase db = PhoneRoomDatabase.getDatabase(application);
@@ -31,6 +33,6 @@ public class PhoneRepository {
     }
 
     public void deleteAllPhones() {
-        PhoneRoomDatabase.databaseWriteExecutor.execute(() -> mPhoneDao.deleteAllPhones());
+        PhoneRoomDatabase.databaseWriteExecutor.execute(mPhoneDao::deleteAllPhones);
     }
 }

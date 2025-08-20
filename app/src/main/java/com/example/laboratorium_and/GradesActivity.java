@@ -10,13 +10,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class GradesActivity extends AppCompatActivity {
 
     private LinearLayout gradesLayout;
-    private Button calculateButton;
     private int numberOfGrades;
     private int[] savedGrades = null;
 
@@ -25,17 +26,18 @@ public class GradesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grades);
 
+        // Ustawienie paska narzędzi i przycisku wstecz
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
         }
 
         gradesLayout = findViewById(R.id.grades_layout);
-        calculateButton = findViewById(R.id.calculate_button);
+        Button calculateButton = findViewById(R.id.calculate_button);
 
+        // Odczytanie liczby ocen i ich stanu (po obrocie ekranu)
         if (savedInstanceState != null) {
             numberOfGrades = savedInstanceState.getInt("numberOfGrades", 5);
             savedGrades = savedInstanceState.getIntArray("selectedGrades");
@@ -43,8 +45,14 @@ public class GradesActivity extends AppCompatActivity {
             numberOfGrades = getIntent().getIntExtra("numberOfGrades", 5);
         }
 
+        // Pobranie tablicy przedmiotów
+        String[] subjects = getResources().getStringArray(R.array.subjects);
+
+        // Tworzenie widoków ocen (tekst + RadioGroup)
         for (int i = 0; i < numberOfGrades; i++) {
-            String subjectName = getString(getResources().getIdentifier("subject_" + (i + 1), "string", getPackageName()));
+            // Pobranie nazwy przedmiotu z tablicy
+            String subjectName = subjects[i];
+
             TextView subjectTextView = new TextView(this);
             subjectTextView.setText(subjectName);
             subjectTextView.setTextSize(18);
@@ -53,11 +61,13 @@ public class GradesActivity extends AppCompatActivity {
             RadioGroup radioGroup = new RadioGroup(this);
             radioGroup.setOrientation(LinearLayout.HORIZONTAL);
 
+            // Dodanie przycisków do zaznaczenia oceny
             for (int j = 2; j <= 5; j++) {
                 RadioButton radioButton = new RadioButton(this);
                 radioButton.setText(String.valueOf(j));
                 radioButton.setId(View.generateViewId());
 
+                // Przywracanie wcześniej zaznaczonej oceny (jeśli istnieje)
                 if (savedGrades != null && savedGrades.length > i && savedGrades[i] == j) {
                     radioButton.setChecked(true);
                 }
@@ -66,10 +76,12 @@ public class GradesActivity extends AppCompatActivity {
             gradesLayout.addView(radioGroup);
         }
 
+        // Obsługa kliknięcia "Oblicz średnią"
         calculateButton.setOnClickListener(v -> {
             int total = 0;
             int count = 0;
 
+            // Przechodzenie po wszystkich RadioGroup i sumowanie ocen
             for (int i = 0; i < gradesLayout.getChildCount(); i++) {
                 View view = gradesLayout.getChildAt(i);
                 if (view instanceof RadioGroup) {
@@ -85,6 +97,7 @@ public class GradesActivity extends AppCompatActivity {
                 }
             }
 
+            // Jeżeli wszystkie oceny zostały wybrane — oblicz średnią i wróć
             if (count == numberOfGrades) {
                 double average = total / (double) count;
 
@@ -93,22 +106,25 @@ public class GradesActivity extends AppCompatActivity {
                 setResult(RESULT_OK, resultIntent);
                 finish();
             } else {
+                // Komunikat jeśli nie wszystkie przedmioty mają ocenę
                 Toast.makeText(this, getString(R.string.toast_all_subjects_required), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    // Obsługa kliknięcia strzałki wstecz na pasku narzędzi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // Zapisywanie zaznaczonych ocen przy zmianie stanu (obrót ekranu)
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         int[] selectedGrades = new int[numberOfGrades];
@@ -134,7 +150,7 @@ public class GradesActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
 }

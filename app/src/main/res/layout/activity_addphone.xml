@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!-- Nagłówek -->
             <TextView
                 android:id="@+id/header"
                 android:layout_width="0dp"
@@ -33,6 +34,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Toolbar z przyciskiem powrotu -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -43,52 +45,96 @@
                 app:navigationIcon="@drawable/ic_back"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+            <!-- Tabela z polami tekstowymi -->
+            <TableLayout
                 android:id="@+id/formLayout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="16dp"
+                android:padding="16dp"
+                android:shrinkColumns="*"
+                android:stretchColumns="1"
                 app:layout_constraintTop_toBottomOf="@id/header"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:shrinkColumns="*"
-                    android:stretchColumns="1"
-                    android:padding="16dp">
+                <!-- Marka telefonu -->
+                <TableRow>
+                    <TextView android:text="@string/phone_brand" />
 
-                    <TableRow>
-                        <TextView android:text="@string/phone_brand" />
-                        <EditText android:id="@+id/addBrand" android:minHeight="48dp" android:hint="@string/enter_brand" />
-                    </TableRow>
+                    <EditText
+                        android:id="@+id/addBrand"
+                        android:layout_width="match_parent"
+                        android:autofillHints="deviceBrand"
+                        android:hint="@string/enter_brand"
+                        android:inputType="textCapWords"
+                        android:minHeight="48dp"
+                        android:textColor="#212121"
+                        android:textColorHint="#616161" />
+                </TableRow>
 
-                    <TableRow>
-                        <TextView android:text="@string/phone_name" />
-                        <EditText android:id="@+id/addName" android:minHeight="48dp" android:hint="@string/enter_model" />
-                    </TableRow>
+                <!-- Nazwa modelu -->
+                <TableRow>
+                    <TextView android:text="@string/phone_name" />
 
-                    <TableRow>
-                        <TextView android:text="@string/android_version" />
-                        <EditText android:id="@+id/addVersion" android:minHeight="48dp" android:hint="@string/enter_version" />
-                    </TableRow>
+                    <EditText
+                        android:id="@+id/addName"
+                        android:layout_width="match_parent"
+                        android:autofillHints="name"
+                        android:hint="@string/enter_model"
+                        android:inputType="textCapWords"
+                        android:minHeight="48dp"
+                        android:textColor="#212121"
+                        android:textColorHint="#616161" />
+                </TableRow>
 
-                    <TableRow>
-                        <TextView android:text="@string/web_site" />
-                        <EditText android:id="@+id/addWebsite" android:minHeight="48dp" android:hint="@string/enter_address" />
-                    </TableRow>
+                <!-- Wersja Androida -->
+                <TableRow>
+                    <TextView android:text="@string/android_version" />
 
-                    <TableRow>
-                        <Button android:id="@+id/buttonAddWebsite" android:text="@string/www_page" />
-                        <Button android:id="@+id/buttonAddCancel" android:text="@string/cancel" />
-                        <Button android:id="@+id/buttonAddSave" android:text="@string/save" />
-                    </TableRow>
+                    <EditText
+                        android:id="@+id/addVersion"
+                        android:layout_width="match_parent"
+                        android:autofillHints="softwareVersion"
+                        android:hint="@string/enter_version"
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:textColor="#212121"
+                        android:textColorHint="#616161" />
+                </TableRow>
 
-                </TableLayout>
-            </LinearLayout>
+                <!-- Adres strony -->
+                <TableRow>
+                    <TextView android:text="@string/web_site" />
 
+                    <EditText
+                        android:id="@+id/addWebsite"
+                        android:layout_width="match_parent"
+                        android:autofillHints="url"
+                        android:hint="@string/enter_address"
+                        android:inputType="textUri"
+                        android:minHeight="48dp"
+                        android:textColor="#212121"
+                        android:textColorHint="#616161" />
+                </TableRow>
+
+                <!-- Przyciski: strona, anuluj, zapisz -->
+                <TableRow style="?android:attr/buttonBarStyle">
+
+                    <Button
+                        android:id="@+id/buttonAddWebsite"
+                        android:text="@string/www_page" />
+
+                    <Button
+                        android:id="@+id/buttonAddCancel"
+                        android:text="@string/cancel" />
+
+                    <Button
+                        android:id="@+id/buttonAddSave"
+                        android:text="@string/save" />
+                </TableRow>
+
+            </TableLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

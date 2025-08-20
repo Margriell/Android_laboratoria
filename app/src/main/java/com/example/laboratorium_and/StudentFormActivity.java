@@ -8,11 +8,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class StudentFormActivity extends AppCompatActivity {
 
+    // Pola formularza i przyciski
     private EditText firstName, lastName, gradesNumber;
     private Button submitButton, endButton;
     private TextView averageTextView;
@@ -20,14 +25,43 @@ public class StudentFormActivity extends AppCompatActivity {
     private String averageText = "";
     private String endButtonText = "";
 
+    // Launcher dla Activity Result API
+    private ActivityResultLauncher<Intent> gradesLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_form2);
 
+        // Inicjalizacja launchera
+        gradesLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Intent data = result.getData();
+                        double average = data.getDoubleExtra("average", -1);
+                        if (average != -1) {
+                            isAverageVisible = true;
+                            averageText = getString(R.string.average_placeholder, average);
+                            averageTextView.setVisibility(View.VISIBLE);
+                            averageTextView.setText(averageText);
+
+                            if (average >= 3) {
+                                endButton.setText(R.string.end_button_good);
+                            } else {
+                                endButton.setText(R.string.end_button_bad);
+                            }
+
+                            endButtonText = endButton.getText().toString();
+                            endButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+        );
+
+        // Ustawienie paska narzędzi z przyciskiem powrotu
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
@@ -36,6 +70,7 @@ public class StudentFormActivity extends AppCompatActivity {
         TextView header = findViewById(R.id.header);
         header.setText(getString(R.string.header_form));
 
+        // Inicjalizacja widoków
         firstName = findViewById(R.id.first_name);
         lastName = findViewById(R.id.last_name);
         gradesNumber = findViewById(R.id.grades_number);
@@ -43,6 +78,7 @@ public class StudentFormActivity extends AppCompatActivity {
         endButton = findViewById(R.id.end_button);
         averageTextView = findViewById(R.id.average_text);
 
+        // Przywrócenie stanu po obrocie ekranu
         if (savedInstanceState != null) {
             firstName.setText(savedInstanceState.getString("firstName"));
             lastName.setText(savedInstanceState.getString("lastName"));
@@ -60,11 +96,13 @@ public class StudentFormActivity extends AppCompatActivity {
             }
 
         } else {
+            // Ukrycie przycisków na starcie
             submitButton.setVisibility(View.INVISIBLE);
             averageTextView.setVisibility(View.GONE);
             endButton.setVisibility(View.GONE);
         }
 
+        // Walidacja pól po utracie fokusu
         firstName.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 validateFields();
@@ -83,14 +121,16 @@ public class StudentFormActivity extends AppCompatActivity {
             }
         });
 
+        // Obsługa kliknięcia przycisku "submit"
         submitButton.setOnClickListener(v -> {
             String gradesNumberStr = gradesNumber.getText().toString().trim();
             int numberOfGrades = Integer.parseInt(gradesNumberStr);
             Intent intent = new Intent(StudentFormActivity.this, GradesActivity.class);
             intent.putExtra("numberOfGrades", numberOfGrades);
-            startActivityForResult(intent, 1);
+            gradesLauncher.launch(intent);
         });
 
+        // Obsługa kliknięcia przycisku "end"
         endButton.setOnClickListener(v -> {
             String buttonText = endButton.getText().toString();
 
@@ -100,21 +140,21 @@ public class StudentFormActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.toast_conditional_pass), Toast.LENGTH_LONG).show();
             }
 
-            endButton.postDelayed(() -> {
-                finishAffinity();
-                System.exit(0);
-            }, 1500);
+            // Zamknięcie aplikacji po krótkim opóźnieniu
+            endButton.postDelayed(this::finishAffinity, 1500);
         });
     }
 
+    // Obsługa przycisku wstecz w pasku narzędzi
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    // Sprawdzenie poprawności wprowadzonych danych
     private void validateFields() {
         boolean valid = true;
 
@@ -136,7 +176,7 @@ public class StudentFormActivity extends AppCompatActivity {
             lastName.setError(null);
         }
 
-        int liczbaOcen = 0;
+        int liczbaOcen;
         if (liczbaOcenStr.isEmpty()) {
             gradesNumber.setError(getString(R.string.error_grades_number));
             valid = false;
@@ -155,6 +195,7 @@ public class StudentFormActivity extends AppCompatActivity {
             }
         }
 
+        // Pokaż lub ukryj przycisk "submit" w zależności od poprawności
         if (valid) {
             submitButton.setVisibility(View.VISIBLE);
         } else {
@@ -162,8 +203,9 @@ public class StudentFormActivity extends AppCompatActivity {
         }
     }
 
+    // Zachowanie danych przy zmianie konfiguracji
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putString("firstName", firstName.getText().toString());
@@ -174,30 +216,5 @@ public class StudentFormActivity extends AppCompatActivity {
         outState.putBoolean("isAverageVisible", isAverageVisible);
         outState.putString("averageText", averageTextView.getText().toString());
         outState.putString("endButtonText", endButton.getText().toString());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            double average = data.getDoubleExtra("average", -1);
-
-            if (average != -1) {
-                isAverageVisible = true;
-                averageText = getString(R.string.average_placeholder, average);
-                averageTextView.setVisibility(View.VISIBLE);
-                averageTextView.setText(averageText);
-
-                if (average >= 3) {
-                    endButton.setText(R.string.end_button_good);
-                } else {
-                    endButton.setText(R.string.end_button_bad);
-                }
-
-                endButtonText = endButton.getText().toString();
-                endButton.setVisibility(View.VISIBLE);
-            }
-        }
     }
 }

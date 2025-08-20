@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 // Klasa przechowująca stan i postęp pobierania z implementacją Parcelable
 public class ProgressEvent implements Parcelable {
+
     // Statusy pobierania
     public static final int OK = 0;
     public static final int IN_PROGRESS = 1;
@@ -30,7 +31,7 @@ public class ProgressEvent implements Parcelable {
     }
 
     // Implementacja Parcelable
-    public static final Creator<ProgressEvent> CREATOR = new Creator<ProgressEvent>() {
+    public static final Creator<ProgressEvent> CREATOR = new Creator<>() {
         @Override
         public ProgressEvent createFromParcel(Parcel in) {
             return new ProgressEvent(in);

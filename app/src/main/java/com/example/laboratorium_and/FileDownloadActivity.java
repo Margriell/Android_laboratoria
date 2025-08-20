@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -25,10 +24,8 @@ import androidx.lifecycle.LiveData;
 
 // Główna aktywność do obsługi pobierania plików
 public class FileDownloadActivity extends AppCompatActivity {
-    private static final int KOD_PROŚBY_O_UPRAWNIENIA = 1; // Kod żądania uprawnień
+    private static final int KOD_PROSBY_O_UPRAWNIENIA = 1; // Kod żądania uprawnień
     private EditText urlInput;
-    private Button getInfoButton;
-    private Button downloadButton;
     private TextView fileSizeValue;
     private TextView fileTypeValue;
     private TextView bytesDownloadedValue;
@@ -38,10 +35,10 @@ public class FileDownloadActivity extends AppCompatActivity {
     // Wiązanie z usługą pobierania
     private boolean serviceBound = false;
     private LiveData<ProgressEvent> progressEventLiveData;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            // Połączenie z usługą i rozpoczęcie obserwacji postępu
+            // Połączenie z usługą pobierania i obserwacja postępu
             serviceBound = true;
             DownloadService.DownloadServiceBinder binder = (DownloadService.DownloadServiceBinder) service;
             progressEventLiveData = binder.getProgressEvent();
@@ -72,8 +69,8 @@ public class FileDownloadActivity extends AppCompatActivity {
         }
 
         urlInput = findViewById(R.id.url_input);
-        getInfoButton = findViewById(R.id.get_info_button);
-        downloadButton = findViewById(R.id.download_button);
+        Button getInfoButton = findViewById(R.id.get_info_button);
+        Button downloadButton = findViewById(R.id.download_button);
         fileSizeValue = findViewById(R.id.file_size_value);
         fileTypeValue = findViewById(R.id.file_type_value);
         bytesDownloadedValue = findViewById(R.id.bytes_downloaded_value);
@@ -115,14 +112,14 @@ public class FileDownloadActivity extends AppCompatActivity {
             shortTask.executeTask(new ShortTask.ResultCallback() {
                 @Override
                 public void onSuccess(FileInfo result) {
-                    fileSizeValue.setText(result.size + " bajtów");
+                    fileSizeValue.setText(getString(R.string.file_size, result.size));
                     fileTypeValue.setText(result.type != null ? result.type : "?");
                 }
 
                 @Override
                 public void onError(Throwable throwable) {
                     Toast.makeText(FileDownloadActivity.this, "Błąd: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    fileSizeValue.setText("0 bajtów");
+                    fileSizeValue.setText(getString(R.string.file_size_unknown));
                     fileTypeValue.setText("?");
                 }
             }, urlStr);
@@ -143,7 +140,7 @@ public class FileDownloadActivity extends AppCompatActivity {
         // Aktualizacja postępu pobierania w UI
         if (event == null) return;
 
-        bytesDownloadedValue.setText(event.progress + " / " + event.total + " bajtów");
+        bytesDownloadedValue.setText(getString(R.string.bytes_downloaded, event.progress, event.total));
         if (event.total > 0) {
             progressBar.setMax(event.total);
             progressBar.setProgress(event.progress);
@@ -168,14 +165,14 @@ public class FileDownloadActivity extends AppCompatActivity {
             }
         }
         if (!wszystkieUprawnienia) {
-            ActivityCompat.requestPermissions(this, wymaganeUprawnienia, KOD_PROŚBY_O_UPRAWNIENIA);
+            ActivityCompat.requestPermissions(this, wymaganeUprawnienia, KOD_PROSBY_O_UPRAWNIENIA);
         } else {
             uruchomPobieranie(urlStr);
         }
     }
 
     private String[] pobierzWymaganeUprawnienia() {
-        // Określanie wymaganych uprawnień w zależności od wersji Androida
+        // Określanie wymaganych uprawnień do pobierania w zależności od wersji Androida
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return new String[]{Manifest.permission.POST_NOTIFICATIONS};
         } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -193,10 +190,10 @@ public class FileDownloadActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // Obsługa wyniku żądania uprawnień
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == KOD_PROŚBY_O_UPRAWNIENIA && grantResults.length > 0) {
+        if (requestCode == KOD_PROSBY_O_UPRAWNIENIA && grantResults.length > 0) {
             boolean wszystkieZgodzone = true;
             for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {

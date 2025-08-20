@@ -11,25 +11,27 @@ import androidx.appcompat.widget.Toolbar;
 public class EditPhoneActivity extends AppCompatActivity {
 
     private EditText editName, editBrand, editVersion, editWebsite;
-    private long phoneId = -1;
+    private long phoneId = -1; // ID edytowanego telefonu
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editphone);
 
+        // Ustaw toolbar i strzałkę wstecz
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Inicjalizacja pól tekstowych
         editName = findViewById(R.id.editName);
         editBrand = findViewById(R.id.editBrand);
         editVersion = findViewById(R.id.editVersion);
         editWebsite = findViewById(R.id.editWebsite);
 
+        // Pobranie danych przekazanych z DatabaseActivity
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("id")) {
             phoneId = intent.getLongExtra("id", -1);
@@ -39,8 +41,10 @@ public class EditPhoneActivity extends AppCompatActivity {
             editWebsite.setText(intent.getStringExtra("website"));
         }
 
+        // Przycisk anuluj – zamknij bez zapisywania
         findViewById(R.id.buttonEditCancel).setOnClickListener(v -> finish());
 
+        // Przycisk zapisz – walidacja i zwrot danych
         findViewById(R.id.buttonEditSave).setOnClickListener(v -> {
             String name = editName.getText().toString().trim();
             String brand = editBrand.getText().toString().trim();
@@ -49,6 +53,7 @@ public class EditPhoneActivity extends AppCompatActivity {
 
             boolean hasError = false;
 
+            // Sprawdzenie czy pola nie są puste
             if (name.isEmpty()) {
                 editName.setError("Pole nazwa nie może być puste");
                 hasError = true;
@@ -68,6 +73,7 @@ public class EditPhoneActivity extends AppCompatActivity {
 
             if (hasError) return;
 
+            // Zwróć zaktualizowane dane do poprzedniej aktywności
             Intent resultIntent = new Intent();
             resultIntent.putExtra("id", phoneId);
             resultIntent.putExtra("name", name);
@@ -78,6 +84,7 @@ public class EditPhoneActivity extends AppCompatActivity {
             finish();
         });
 
+        // Przycisk otwórz stronę WWW w przeglądarce
         findViewById(R.id.buttonEditWebsite).setOnClickListener(v -> {
             String url = editWebsite.getText().toString();
             if (!url.startsWith("http")) url = "http://" + url;
@@ -86,6 +93,7 @@ public class EditPhoneActivity extends AppCompatActivity {
         });
     }
 
+    // Obsługa kliknięcia strzałki wstecz w toolbarze
     @Override
     public boolean onSupportNavigateUp() {
         finish();

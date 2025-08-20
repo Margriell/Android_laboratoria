@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout pojedynczego wiersza listy telefonu.
+    Zawiera markę telefonu i jego nazwę.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,6 +12,7 @@
     android:gravity="center_vertical"
     android:layout_marginBottom="10dp">
 
+    <!-- Marka telefonu -->
     <TextView
         android:id="@+id/phone_brand"
         android:layout_width="0dp"
@@ -16,6 +21,7 @@
         android:text="@string/phone_brand"
         android:textSize="16sp" />
 
+    <!-- Nazwa telefonu -->
     <TextView
         android:id="@+id/phone_name"
         android:layout_width="wrap_content"

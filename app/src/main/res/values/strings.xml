@@ -15,24 +15,26 @@
     <string name="error_first_name">Imię nie może być puste</string>
     <string name="error_last_name">Nazwisko nie może być puste</string>
     <string name="error_grades_number">Liczba ocen nie może być pusta</string>
-    <string name="error_grades_range">Liczba ocen musi być w przedziale [5-15]</string>
+    <string name="error_grades_range">Liczba ocen musi być w przedziale [5–15]</string>
     <string name="error_invalid_number">Wprowadź poprawną liczbę</string>
     <string name="header_grades">Oceny</string>
-    <string name="subject_1">Programowanie w języku Java</string>
-    <string name="subject_2">Algorytmy i struktury danych</string>
-    <string name="subject_3">Systemy operacyjne</string>
-    <string name="subject_4">Bazy danych</string>
-    <string name="subject_5">Inżynieria oprogramowania</string>
-    <string name="subject_6">Sieci komputerowe</string>
-    <string name="subject_7">Sztuczna inteligencja</string>
-    <string name="subject_8">Teoria obliczeń</string>
-    <string name="subject_9">Bezpieczeństwo komputerowe</string>
-    <string name="subject_10">Programowanie aplikacji mobilnych</string>
-    <string name="subject_11">Programowanie w języku C++</string>
-    <string name="subject_12">Grafika komputerowa</string>
-    <string name="subject_13">Programowanie w języku Python</string>
-    <string name="subject_14">Chmura obliczeniowa</string>
-    <string name="subject_15">Robotyka</string>
+    <string-array name="subjects">
+        <item>Programowanie w języku Java</item>
+        <item>Algorytmy i struktury danych</item>
+        <item>Systemy operacyjne</item>
+        <item>Bazy danych</item>
+        <item>Inżynieria oprogramowania</item>
+        <item>Sieci komputerowe</item>
+        <item>Sztuczna inteligencja</item>
+        <item>Teoria obliczeń</item>
+        <item>Bezpieczeństwo komputerowe</item>
+        <item>Programowanie aplikacji mobilnych</item>
+        <item>Programowanie w języku C++</item>
+        <item>Grafika komputerowa</item>
+        <item>Programowanie w języku Python</item>
+        <item>Chmura obliczeniowa</item>
+        <item>Robotyka</item>
+    </string-array>
     <string name="label_grades">Wprowadź oceny:</string>
     <string name="calculate_button">Oblicz średnią</string>
     <string name="toast_all_subjects_required">Proszę ocenić wszystkie przedmioty</string>
@@ -71,4 +73,18 @@
     <string name="download_button">Pobierz</string>
     <string name="bytes_downloaded_label">Pobrano bajtów:</string>
     <string name="bytes_downloaded_value">0 bajtów</string>
+    <string name="button_4">AndPaint</string>
+    <string name="header_drawing">AndPaint!</string>
+    <string name="clear_button_text">X</string>
+    <string name="choose_red">Wybierz kolor czerwony</string>
+    <string name="choose_yellow">Wybierz kolor żółty</string>
+    <string name="choose_green">Wybierz kolor zielony</string>
+    <string name="choose_blue">Wybierz kolor niebieski</string>
+    <string name="clear_button_desc">Usuń zawartość rysunku</string>
+    <string name="save_image_option">Zapisz obraz</string>
+    <string name="browse_image_option">Przeglądaj obrazy</string>
+    <string name="file_size"> %1$d bajtów </string>
+    <string name="file_size_unknown"> 0 bajtów </string>
+    <string name="bytes_downloaded"> %1$d / %2$d bajtów </string>
+    <string name="image_preview_description">Podgląd wybranego obrazka z galerii</string>
 </resources>

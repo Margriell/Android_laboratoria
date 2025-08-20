@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
+// Ekran główny z przyciskami do poszczególnych modułów aplikacji
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -27,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
         Button button3 = findViewById(R.id.button3);
         button3.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, FileDownloadActivity.class);
+            startActivity(intent);
+        });
+
+        Button button4 = findViewById(R.id.button4);
+        button4.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, DrawingActivity.class);
             startActivity(intent);
         });
     }

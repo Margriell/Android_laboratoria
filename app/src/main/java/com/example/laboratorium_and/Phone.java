@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+// Model danych reprezentujący telefon w lokalnej bazie danych Room
 @Entity(tableName = "phone_table")
 public class Phone {
 

@@ -10,4 +10,5 @@
     <color name="gradesButtonColor">#C25D27</color>
     <color name="databaseColor">#952DE4</color>
     <color name="fileDownloadColor">#673AB7</color>
+    <color name="drawingColor">#1126B4</color>
 </resources>

@@ -2,7 +2,6 @@
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -28,6 +27,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Toolbar z przyciskiem powrotu-->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="36dp"
+            app:titleTextColor="@android:color/white"
+            app:navigationIcon="@drawable/ic_back" />
+
         <!-- Etykieta: Imię -->
         <TextView
             android:id="@+id/label_first_name"
@@ -36,8 +46,10 @@
             android:text="@string/label_first_name"
             app:layout_constraintTop_toBottomOf="@id/header"
             app:layout_constraintStart_toStartOf="parent"
-            android:padding="16dp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="0dp" />
 
         <!-- Pole tekstowe: Imię -->
         <EditText
@@ -46,6 +58,10 @@
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:hint="@string/hint_first_name"
+            android:inputType="textPersonName"
+            android:autofillHints="givenName"
+            android:textColor="#212121"
+            android:textColorHint="#616161"
             app:layout_constraintTop_toBottomOf="@id/label_first_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,13 +71,15 @@
         <!-- Etykieta: Nazwisko -->
         <TextView
             android:id="@+id/label_last_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_last_name"
             app:layout_constraintTop_toBottomOf="@id/first_name"
             app:layout_constraintStart_toStartOf="parent"
-            android:padding="16dp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="0dp" />
 
         <!-- Pole tekstowe: Nazwisko -->
         <EditText
@@ -70,6 +88,10 @@
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:hint="@string/hint_last_name"
+            android:inputType="textPersonName"
+            android:autofillHints="familyName"
+            android:textColor="#212121"
+            android:textColorHint="#616161"
             app:layout_constraintTop_toBottomOf="@id/label_last_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -79,13 +101,15 @@
         <!-- Etykieta: Liczba ocen -->
         <TextView
             android:id="@+id/label_grades_number"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_grades_number"
             app:layout_constraintTop_toBottomOf="@id/last_name"
             app:layout_constraintStart_toStartOf="parent"
-            android:padding="16dp"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:padding="0dp" />
 
         <!-- Pole tekstowe: Liczba ocen -->
         <EditText
@@ -95,6 +119,9 @@
             android:minHeight="48dp"
             android:hint="@string/hint_grades_number"
             android:inputType="number"
+            android:autofillHints="quantity"
+            android:textColor="#212121"
+            android:textColorHint="#616161"
             app:layout_constraintTop_toBottomOf="@id/label_grades_number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -140,17 +167,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:padding="16dp"
             android:layout_marginTop="16dp" />
-
-        <!-- Toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="36dp"
-            app:titleTextColor="@android:color/white"
-            app:navigationIcon="@drawable/ic_back" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

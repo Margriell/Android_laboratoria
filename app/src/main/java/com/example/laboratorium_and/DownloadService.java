@@ -43,7 +43,7 @@ public class DownloadService extends Service {
     private boolean isForeground = false; // Flaga stanu usługi pierwszoplanowej
 
     // LiveData do przesyłania postępu pobierania
-    private MutableLiveData<ProgressEvent> progressLiveData = new MutableLiveData<>(null);
+    private final MutableLiveData<ProgressEvent> progressLiveData = new MutableLiveData<>(null);
 
     // Binder do wiązania usługi z aktywnością
     public class DownloadServiceBinder extends android.os.Binder {
@@ -73,6 +73,15 @@ public class DownloadService extends Service {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (handlerThread != null) {
+            handlerThread.quitSafely(); // Zatrzymuje wątek bezpiecznie
+            handlerThread = null;
+        }
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Rozpoczęcie usługi z pobraniem pliku
         String urlStr = intent.getStringExtra("url");
@@ -90,6 +99,9 @@ public class DownloadService extends Service {
                 isForeground = false;
                 notificationManager.notify(NOTIFICATION_ID_COMPLETE,
                         budujPowiadomienie("Pobieranie nieudane: " + e.getMessage(), false, 0, 0, android.R.drawable.stat_notify_error).build()); // Powiadomienie o błędzie
+            } finally {
+                notificationManager.cancelAll(); // Kasuj wszystkie notyfikacje na końcu
+                stopSelf(); // Zatrzymaj usługę
             }
         });
         return START_NOT_STICKY;
@@ -107,11 +119,24 @@ public class DownloadService extends Service {
     @SuppressLint("NewApi")
     private void pobierzPlik(String urlStr) throws IOException {
         // Wykonywanie pobierania pliku w tle
+        if (urlStr == null) {
+            Log.e(TAG, "Błąd: URL jest null");
+            progressLiveData.postValue(new ProgressEvent(0, 0, ProgressEvent.ERROR));
+            stopForeground(true);
+            isForeground = false;
+            notificationManager.notify(NOTIFICATION_ID_COMPLETE,
+                    budujPowiadomienie("Pobieranie nieudane: Brak URL", false, 0, 0, android.R.drawable.stat_notify_error).build());
+            return;
+        }
+
         BufferedInputStream input = null;
         FileOutputStream output = null;
         HttpURLConnection connection = null;
         Uri uri = null;
         String fileName = urlStr.substring(urlStr.lastIndexOf('/') + 1);
+
+        long lastUpdateTime = 0; // Do throttlingu aktualizacji
+        int updateInterval = 50; // 50 ms dla bardzo płynnego paska postępu
 
         try {
             URL url = new URL(urlStr); // Tworzenie obiektu URL
@@ -151,7 +176,10 @@ public class DownloadService extends Service {
                 File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS); // Pobieranie katalogu Downloads
                 File file = new File(downloadsDir, fileName);
                 if (file.exists()) {
-                    file.delete(); // Usuwanie istniejącego pliku
+                    if (!file.delete()) {
+                        Log.e(TAG, "Nie udało się usunąć istniejącego pliku: " + file.getAbsolutePath());
+                        throw new IOException("Nie udało się usunąć istniejącego pliku: " + file.getAbsolutePath());
+                    }
                 }
                 output = new FileOutputStream(file); // Otwieranie strumienia wyjściowego dla starszych wersji
             }
@@ -162,15 +190,19 @@ public class DownloadService extends Service {
             while ((bytesRead = input.read(buffer)) != -1) {
                 output.write(buffer, 0, bytesRead); // Zapis danych do pliku
                 totalBytes += bytesRead;
-                Log.d(TAG, "Pobrano " + bytesRead + " bajtów. Łącznie: " + totalBytes + " bajtów");
 
-                progressLiveData.postValue(new ProgressEvent(totalBytes, contentLength, ProgressEvent.IN_PROGRESS)); // Aktualizacja postępu
-                notificationManager.notify(NOTIFICATION_ID_PROGRESS,
-                        budujPowiadomienie("Pobieranie...", true, totalBytes, contentLength, android.R.drawable.stat_sys_download).build()); // Aktualizacja powiadomienia
+                long currentTime = System.currentTimeMillis();
+                if ((currentTime - lastUpdateTime >= updateInterval) || (totalBytes == contentLength)) {
+                    Log.d(TAG, "Pobrano " + bytesRead + " bajtów. Łącznie: " + totalBytes + " bajtów");
+                    progressLiveData.postValue(new ProgressEvent(totalBytes, contentLength, ProgressEvent.IN_PROGRESS)); // Aktualizacja postępu
+                    notificationManager.notify(NOTIFICATION_ID_PROGRESS,
+                            budujPowiadomienie("Pobieranie...", true, totalBytes, contentLength, android.R.drawable.stat_sys_download).build()); // Aktualizacja powiadomienia
+                    lastUpdateTime = currentTime;
+                }
             }
             output.flush(); // Wymuszenie zapisu bufora
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && uri != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 ContentValues values = new ContentValues(); // Aktualizacja stanu w MediaStore
                 values.put(MediaStore.Downloads.IS_PENDING, 0);
                 getContentResolver().update(uri, values, null, null);
@@ -210,9 +242,6 @@ public class DownloadService extends Service {
             } catch (IOException e) {
                 Log.e(TAG, "Błąd zamykania zasobów: " + e.getMessage()); // Logowanie błędu przy zamykaniu
             }
-        }
-        if (progressLiveData.getValue() == null || progressLiveData.getValue().result != ProgressEvent.IN_PROGRESS) {
-            stopSelf(); // Zatrzymanie usługi, jeśli nie ma postępu
         }
     }
 

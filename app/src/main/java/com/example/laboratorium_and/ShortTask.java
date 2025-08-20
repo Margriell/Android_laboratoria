@@ -2,6 +2,7 @@ package com.example.laboratorium_and;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.net.URL;
 import java.util.concurrent.Callable;
@@ -29,20 +30,15 @@ public class ShortTask {
         void onError(Throwable throwable); // Wywołanie przy błędzie
     }
 
-    public Future<FileInfo> executeTask(ResultCallback callback, String param) {
-        // Wykonywanie zadania w tle z wywołaniem zwrotnym
+    // Uruchamia zadanie w tle
+    public void executeTask(ResultCallback callback, String param) {
+        // Jeśli jakieś zadanie już działa — anuluj je
         if (future != null && !future.isDone()) {
             future.cancel(true);
+            Log.d(TAG, "Poprzednie zadanie zostało anulowane");
         }
 
-        Runnable completionTask = () -> {
-            try {
-                FileInfo result = future.get();
-                callback.onSuccess(result);
-            } catch (Exception e) {
-                callback.onError(e);
-            }
-        };
+        Log.d(TAG, "Rozpoczynam zadanie dla URL: " + param);
 
         Callable<FileInfo> asyncTask = () -> {
             HttpsURLConnection connection = null;
@@ -61,9 +57,18 @@ public class ShortTask {
                 String contentType = connection.getContentType();
 
                 FileInfo result = new FileInfo(contentLength, contentType);
-                mainThreadHandler.post(completionTask);
+
+                Log.d(TAG, "Pobrano nagłówki: length=" + contentLength + ", type=" + contentType);
+
+                // Przekazanie wyniku do wątku UI
+                mainThreadHandler.post(() -> callback.onSuccess(result));
+
                 return result;
 
+            } catch (Exception e) {
+                Log.e(TAG, "Błąd podczas wykonywania zadania", e);
+                mainThreadHandler.post(() -> callback.onError(e));
+                throw e; // żeby wyjątek był widoczny w logach ExecutorService
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -71,15 +76,17 @@ public class ShortTask {
             }
         };
 
+        // Uruchom zadanie w tle
         future = executorService.submit(asyncTask);
-        return future;
     }
 
     public void shutdown() {
         // Zamykanie puli wątków i anulowanie zadań
         if (future != null && !future.isDone()) {
             future.cancel(true);
+            Log.d(TAG, "Zadanie zostało anulowane przed zamknięciem");
         }
         executorService.shutdown();
+        Log.d(TAG, "ExecutorService został zamknięty");
     }
 }

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Nagłówek -->
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="135dp"
+        android:background="@color/drawingColor"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/header_drawing"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Toolbar z przyciskiem powrotu -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_back"
+        android:layout_marginTop="36dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Powierzchnia do rysowania -->
+    <com.example.laboratorium_and.DrawingSurface
+        android:id="@+id/drawing_surface"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@id/btn_red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Guideline - odstęp od dołu dla przycisków -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottom_margin_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="24dp" />
+
+    <!-- Przycisk wyboru koloru czerwonego -->
+    <Button
+        android:id="@+id/btn_red"
+        style="@style/OvalButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/choose_red"
+        android:backgroundTint="@android:color/holo_red_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_margin_guideline"
+        app:layout_constraintWidth_percent="0.19" />
+
+    <!-- Przycisk wyboru koloru żółtego -->
+    <Button
+        android:id="@+id/btn_yellow"
+        style="@style/OvalButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/choose_yellow"
+        android:backgroundTint="@android:color/holo_orange_light"
+        app:layout_constraintStart_toEndOf="@id/btn_red"
+        app:layout_constraintBottom_toTopOf="@id/bottom_margin_guideline"
+        app:layout_constraintWidth_percent="0.19" />
+
+    <!-- Przycisk wyboru koloru zielonego -->
+    <Button
+        android:id="@+id/btn_green"
+        style="@style/OvalButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/choose_green"
+        android:backgroundTint="@android:color/holo_green_dark"
+        app:layout_constraintStart_toEndOf="@id/btn_yellow"
+        app:layout_constraintBottom_toTopOf="@id/bottom_margin_guideline"
+        app:layout_constraintWidth_percent="0.19" />
+
+    <!-- Przycisk wyboru koloru niebieskiego -->
+    <Button
+        android:id="@+id/btn_blue"
+        style="@style/OvalButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/choose_blue"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        app:layout_constraintStart_toEndOf="@id/btn_green"
+        app:layout_constraintBottom_toTopOf="@id/bottom_margin_guideline"
+        app:layout_constraintWidth_percent="0.19" />
+
+    <!-- Przycisk czyszczenia rysunku -->
+    <Button
+        android:id="@+id/btn_clear"
+        style="@style/OvalButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_button_text"
+        android:textColor="@android:color/white"
+        android:contentDescription="@string/clear_button_desc"
+        app:layout_constraintStart_toEndOf="@id/btn_blue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_margin_guideline"
+        app:layout_constraintWidth_percent="0.19" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

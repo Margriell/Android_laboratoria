@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class AddPhoneActivity extends AppCompatActivity {
 
+    // Pola do wpisania nazwy, marki, wersji Androida i strony WWW
     private EditText addName, addBrand, addVersion, addWebsite;
 
     @Override
@@ -20,17 +21,21 @@ public class AddPhoneActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Włączenie przycisku "wstecz" na toolbarze
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Inicjalizacja pól
         addName = findViewById(R.id.addName);
         addBrand = findViewById(R.id.addBrand);
         addVersion = findViewById(R.id.addVersion);
         addWebsite = findViewById(R.id.addWebsite);
 
+        // Przycisk anuluj - zamknięcie aktywności bez zapisu
         findViewById(R.id.buttonAddCancel).setOnClickListener(v -> finish());
 
+        // Przycisk zapisz - walidacja i zwrócenie danych
         findViewById(R.id.buttonAddSave).setOnClickListener(v -> {
             String name = addName.getText().toString().trim();
             String brand = addBrand.getText().toString().trim();
@@ -39,6 +44,7 @@ public class AddPhoneActivity extends AppCompatActivity {
 
             boolean hasError = false;
 
+            // Sprawdzenie czy pola nie są puste
             if (name.isEmpty()) {
                 addName.setError("Pole nazwa nie może być puste");
                 hasError = true;
@@ -56,8 +62,9 @@ public class AddPhoneActivity extends AppCompatActivity {
                 hasError = true;
             }
 
-            if (hasError) return;
+            if (hasError) return; // przerwij jeśli błąd
 
+            // Przygotuj dane do zwrotu i zamknij aktywność
             Intent resultIntent = new Intent();
             resultIntent.putExtra("name", name);
             resultIntent.putExtra("brand", brand);
@@ -67,14 +74,16 @@ public class AddPhoneActivity extends AppCompatActivity {
             finish();
         });
 
+        // Przycisk otwórz stronę WWW w przeglądarce
         findViewById(R.id.buttonAddWebsite).setOnClickListener(v -> {
             String url = addWebsite.getText().toString();
-            if (!url.startsWith("http")) url = "http://" + url;
+            if (!url.startsWith("http")) url = "http://" + url; //dodanie przedrostka strony jeśli nie występuje
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(browserIntent);
         });
     }
 
+    // Obsługa przycisku wstecz w toolbarze
     @Override
     public boolean onSupportNavigateUp() {
         finish();
