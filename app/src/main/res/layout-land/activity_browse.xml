@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -18,24 +19,31 @@
         app:navigationIcon="@drawable/ic_back" />
 
     <!-- Główna zawartość: poziomy podział na fragmenty -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_weight="1">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/imageListFragment"
             android:name="com.example.laboratorium_and.ImageListFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            app:layout_constraintWidth_percent="0.333"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/imageViewFragment"
+            app:layout="@layout/fragment_image_list"
+            tools:layout="@layout/fragment_image_list" />
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/imageViewFragment"
             android:name="com.example.laboratorium_and.ImageFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2" />
-    </LinearLayout>
+            app:layout_constraintWidth_percent="0.667"
+            app:layout_constraintStart_toEndOf="@id/imageListFragment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout="@layout/fragment_image"
+            tools:layout="@layout/fragment_image" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

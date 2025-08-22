@@ -12,6 +12,7 @@
 - [Podsumowanie](#podsumowanie)
 - [Uruchomienie](#uruchomienie)
 - [Zrzuty ekranu](#zrzuty-ekranu)
+- [GIF-y](#gif-y)
 - [Uprawnienia](#uprawnienia)
 - [Technologie i biblioteki](#technologie-i-biblioteki)
 - [Autor](#autor)
@@ -52,7 +53,7 @@ Moduł umożliwia wprowadzenie danych studenta i ocen, obliczenie średniej oraz
     - Aplikacja poprawnie zachowuje:
         - wartości wprowadzonych danych,
         - widoczność przycisków,
-        - wybraną liczbę ocen i zaznaczone oceny,
+        - zaznaczone oceny przedmiotów,
         - średnią oraz komunikat końcowy.
     - Obsługa oparta jest na `onSaveInstanceState()` / `onRestoreInstanceState()`.
 
@@ -105,7 +106,7 @@ Moduł zarządza listą telefonów w bazie Room, z architekturą MVVM.
 - `PhoneRepository.java` – warstwa pośrednicząca między bazą danych a ViewModel, wykonująca operacje w tle.
 - `PhoneViewModel.java` – udostępnia dane do UI i deleguje operacje CRUD do repozytorium.
 - `PhoneListAdapter.java` – adapter `RecyclerView` wyświetlający listę telefonów i obsługujący kliknięcia.
-- `Phone.java` – encja reprezentująca telefon z polami: id, nazwa, marka, wersja Androida i strona WWW.
+- `Phone.java` – encja reprezentująca telefon z polami: id, nazwa, marka, wersja Androida i strona internetowa.
 - `activity_addphone.xml` – layout formularza dodawania telefonu.
 - `activity_database.xml` – główny layout z listą telefonów i przyciskiem dodawania.
 - `activity_editphone.xml` – layout formularza edycji telefonu.
@@ -136,13 +137,13 @@ Moduł pobiera pliki z Internetu z podglądem postępu, działając w tle.
     - Wykorzystanie usługi `DownloadService` działającej niezależnie od aktywności.
     - Połączenie aktywności z usługą poprzez `ServiceConnection` i obserwowanie zmian stanu pobierania przy użyciu `LiveData`.
     - Interfejs użytkownika reaguje natychmiast na zmiany postępu pobierania.
-    - Proces działa w tle nawet po zamknięciu lub obróceniu aktywności.
+    - Proces działa w tle nawet po zamknięciu aktywności.
 - **Powiadomienia systemowe:**
     - **Podczas pobierania**: powiadomienie w trybie pierwszoplanowym z dynamicznie aktualizowanym paskiem postępu.
     - **Po zakończeniu sukcesem**: informacja o zapisaniu pliku w pamięci urządzenia.
     - **W przypadku błędu**: komunikat o niepowodzeniu pobierania.
 - **Zachowanie stanu przy zmianie orientacji:**
-    - Stan pobierania (liczba pobranych bajtów, całkowity rozmiar, aktualny status) jest zapisywany i odtwarzany po obrocie ekranu.
+    - Informacje o pliku i stan pobierania (liczba pobranych bajtów, całkowity rozmiar, aktualny status) są zapisywane i odtwarzane po obrocie ekranu.
     - Proces pobierania nie jest przerywany w trakcie zmiany konfiguracji urządzenia.
 
 #### Architektura i komponenty
@@ -176,9 +177,9 @@ Moduł umożliwia rysowanie wybranym kolorem farby, zapis i przeglądanie obraz�
 - **Zapis obrazu:**
     - Menu aplikacji zawiera opcję „Zapisz obraz”.
     - Po kliknięciu:
-        - tworzony jest plik graficzny,
+        - tworzony jest plik graficzny (.png),
         - rysunek z bitmapy zapisywany jest na dysku,
-        - nazwa pliku generowana dynamicznie (np. z timestampem),
+        - nazwa pliku generowana dynamicznie (z timestampem),
         - aplikacja sprawdza i ewentualnie prosi o uprawnienia do zapisu,
         - pojawia się `Toast` z potwierdzeniem i nazwą pliku.
 - **Przeglądanie zapisanych obrazów:**
@@ -187,8 +188,8 @@ Moduł umożliwia rysowanie wybranym kolorem farby, zapis i przeglądanie obraz�
         - **Pionowo** – wyświetlany jest tylko `ImageListFragment` (lista plików graficznych).
         - **Poziomo** – ekran dzieli się na dwa fragmenty: lista po lewej (`ImageListFragment`) i podgląd po prawej (`ImageFragment`).
     - Kliknięcie pozycji na liście:
-        - w **poziomie** – podmienia obraz w `ImageFragment`,
         - w **pionie** – otwiera `ViewActivity`, która zawiera `ImageFragment` z wyświetleniem obrazu.
+        - w **poziomie** – podmienia obraz w `ImageFragment`,
     - Obrazy ładowane są z lokalnego folderu aplikacji poprzez `MediaStore`.
 - **Zachowanie stanu:**
     - Rysunek jest zachowywany po obrocie ekranu, ale może ulec niedopasowaniu rozmiaru do nowej orientacji, co powoduje częściowe ucięcie obrazu. Po powrocie do początkowej orientacji rysunek jest w pełni widoczny.
@@ -254,22 +255,90 @@ Menu główne umożliwia wybór modułu.
 ## Zrzuty ekranu
 
 ### Formularz Studenta
-- ![Formularz Studenta](screenshots/student_formm.png "Ekran wprowadzania danych studenta")
-- ![Lista ocen](screenshots/student_grades.png "Dynamiczna lista przedmiotów z ocenami")
+<p style="text-align: center;">
+  <img src="screenshots/student_formm.png" alt="Ekran wprowadzania danych studenta" width="300"/><br/>
+  <em>Ekran wprowadzania danych studenta</em>
+</p>
+
+<p style="text-align: center;">
+  <img src="screenshots/student_grades.png" alt="Dynamiczna lista przedmiotów z ocenami" width="300"/><br/>
+  <em>Dynamiczna lista przedmiotów z ocenami</em>
+</p>
 
 ### Phone DB
-- ![Lista telefonów](screenshots/phone_list.png "Lista telefonów w RecyclerView")
-- ![Dodawanie telefonu](screenshots/phone_add.png "Formularz dodawania nowego telefonu")
-- ![Edycja telefonu](screenshots/phone_edit.png "Formularz edycji istniejącego telefonu")
+<p style="text-align: center;">
+  <img src="screenshots/phone_list.png" alt="Lista telefonów w RecyclerView" width="300"/><br/>
+  <em>Lista telefonów w RecyclerView</em>
+</p>
+
+<p style="text-align: center;">
+  <img src="screenshots/phone_add.png" alt="Formularz dodawania nowego telefonu" width="300"/><br/>
+  <em>Formularz dodawania nowego telefonu</em>
+</p>
+
+<p style="text-align: center;">
+  <img src="screenshots/phone_edit.png" alt="Formularz edycji istniejącego telefonu" width="300"/><br/>
+  <em>Formularz edycji istniejącego telefonu</em>
+</p>
 
 ### Pobieranie Pliku
-- ![Pobieranie pliku](screenshots/file_download.png "Ekran pobierania pliku")
+<p style="text-align: center;">
+  <img src="screenshots/file_download.png" alt="Ekran pobierania pliku" width="300"/><br/>
+  <em>Ekran pobierania pliku</em>
+</p>
 
 ### AndPaint
-- ![Rysowanie](screenshots/andpaint_draw.png "Ekran rysowania w AndPaint")
-- ![Przeglądanie obrazów](screenshots/andpaint_browse_horizontal.png "Przeglądanie obrazów w orientacji poziomej")
-- ![Lista obrazów](screenshots/andpaint_browse_vertical.png "Lista obrazów w orientacji pionowej")
-- ![Podgląd obrazu](screenshots/andpaint_view_vertical.png "Podgląd obrazu w orientacji pionowej")
+<p style="text-align: center;">
+  <img src="screenshots/andpaint_draw.png" alt="Ekran rysowania w AndPaint" width="300"/><br/>
+  <em>Ekran rysowania w AndPaint</em>
+</p>
+
+<p style="text-align: center;">
+  <img src="screenshots/andpaint_browse_horizontal.png" alt="Przeglądanie obrazów w orientacji poziomej" height="300"/><br/>
+  <em>Przeglądanie obrazów w orientacji poziomej</em>
+</p>
+
+<p style="text-align: center;">
+  <img src="screenshots/andpaint_browse_vertical.png" alt="Lista obrazów w orientacji pionowej" width="300"/><br/>
+  <em>Lista obrazów w orientacji pionowej</em>
+</p>
+
+<p style="text-align: center;">
+  <img src="screenshots/andpaint_view_vertical.png" alt="Podgląd obrazu w orientacji pionowej" width="300"/><br/>
+  <em>Podgląd obrazu w orientacji pionowej</em>
+</p>
+
+## GIF-y
+
+Poniżej znajdują się animacje prezentujące działanie poszczególnych modułów aplikacji:
+
+### Formularz Studenta
+<p style="text-align: center;">
+  <img src="gifs/student_form.gif" alt="Animacja formularza studenta" width="300"/><br/>
+  <em>Animacja przedstawiająca wprowadzanie danych i obliczanie średniej w module Formularz Studenta</em>
+</p>
+
+### Phone DB
+<p style="text-align: center;">
+  <img src="gifs/phone_db.gif" alt="Animacja bazy telefonów" width="300"/><br/>
+  <em>Animacja przedstawiająca dodawanie i przeglądanie telefonów w module Phone DB</em>
+</p>
+
+### Pobieranie Pliku
+<p style="text-align: center;">
+  <img src="gifs/file_download.gif" alt="Animacja pobierania pliku" width="300"/><br/>
+  <em>Animacja przedstawiająca proces pobierania pliku z podglądem postępu</em>
+</p>
+
+### AndPaint
+<p style="text-align: center;">
+  <img src="gifs/andpaint.gif" alt="Animacja rysowania i przeglądania w orientacji pionowej" width="300"/><br/>
+  <em>Animacja przedstawiająca rysowanie oraz przeglądanie obrazów w orientacji pionowej z użyciem fragmentów</em>
+</p>
+<p style="text-align: center;">
+  <img src="gifs/andpaint_horizontal.gif" alt="Animacja przeglądania w orientacji poziomej" height="300"/><br/>
+  <em>Animacja przedstawiająca przeglądanie obrazów w orientacji poziomej z podziałem na fragmenty listy i podglądu</em>
+</p>
 
 ## Uprawnienia
 - **Formularz Studenta:**
